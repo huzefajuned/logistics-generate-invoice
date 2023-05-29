@@ -3,7 +3,15 @@ import React, { useState, useEffect } from "react";
 import { Typography, Button } from "antd";
 const { Title } = Typography;
 import { StarOutlined } from "@ant-design/icons";
-const InvoiceHeader = () => {
+interface InvoiceHeaderProps {
+  onSubmitInvoiceDetails: any;
+  invoiceActive: boolean;
+  setInvoiceActive: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const InvoiceHeader: React.FC<InvoiceHeaderProps> = (props) => {
+  const { onSubmitInvoiceDetails, invoiceActive, setInvoiceActive } = props;
+
   const [mounted, setMounted] = useState<boolean>(false);
   // useEffect only runs on the client, so now we can safely show the UI
   useEffect(() => {
@@ -42,16 +50,33 @@ const InvoiceHeader = () => {
         </div>
       </div>
       <div className=" flex flex-row justify-end  items-center text-end  w-4/12">
-        <Button
-          type="primary"
-          ghost
-          className=" text-lg text-blue-500  w-24 h-12 mr-5"
-        >
-          Cancel
-        </Button>
-        <Button className="text-md shad text-white bg-gradient-to-r from-blue-600 to-purple-700 w-36 h-12 ml-0">
-          Generate Invoice
-        </Button>
+        {/* CONDITIONALY SHOW AND HIDE Buttons. WHEN INVOICE IS GENERATED OR NOT. */}
+        {invoiceActive ? (
+          <Button
+            type="primary"
+            ghost
+            className=" text-lg text-blue-500  w-24 h-12 mr-5"
+            onClick={() => setInvoiceActive(false)}
+          >
+            Back
+          </Button>
+        ) : (
+          <>
+            <Button
+              type="primary"
+              ghost
+              className=" text-lg text-blue-500  w-24 h-12 mr-5"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={onSubmitInvoiceDetails}
+              className="text-md shad text-white bg-gradient-to-r from-blue-600 to-purple-700 w-36 h-12 ml-0"
+            >
+              Generate Invoice
+            </Button>
+          </>
+        )}
       </div>
     </div>
   );
